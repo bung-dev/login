@@ -25,4 +25,17 @@ class MemberRepositoryTest {
         Member findMember = memberRepository.findById(member.getId());
         assertThat(findMember).isEqualTo(member);
     }
+
+    @Test
+    void findById(){
+        //given
+        MemberRequest memberRequest = new MemberRequest("test1","test!","test1");
+
+        Member save = memberRepository.save(memberRequest);
+        //when
+        Member findByMember = memberRepository.findById(1L);
+
+        //then
+        assertThat(save).isEqualTo(findByMember);
+    }
 }
