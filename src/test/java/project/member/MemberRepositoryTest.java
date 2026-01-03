@@ -3,6 +3,8 @@ package project.member;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.*;
 
 class MemberRepositoryTest {
@@ -27,15 +29,19 @@ class MemberRepositoryTest {
     }
 
     @Test
-    void findById(){
+    void findAll(){
         //given
         MemberRequest memberRequest = new MemberRequest("test1","test!","test1");
+        MemberRequest memberRequestTwo = new MemberRequest("test2","test!","test2");
 
-        Member save = memberRepository.save(memberRequest);
+        memberRepository.save(memberRequest);
+        memberRepository.save(memberRequestTwo);
         //when
-        Member findByMember = memberRepository.findById(1L);
+        List<Member> all = memberRepository.findAll();
 
         //then
-        assertThat(save).isEqualTo(findByMember);
+        assertThat(all.size()).isEqualTo(2);
+        assertThat(all.get(0).getName()).isEqualTo(memberRequest.name());
+        assertThat(all.get(1).getName()).isEqualTo(memberRequestTwo.name());
     }
 }
