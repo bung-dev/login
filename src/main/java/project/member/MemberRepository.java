@@ -21,7 +21,6 @@ public class MemberRepository {
         member.setPassword(memberRequest.password());
         member.setName(memberRequest.name());
         member.setId(++sequence);
-        log.info("member={}",member);
         store.put(member.getId(),member);
 
         return member;
