@@ -36,6 +36,13 @@ public class MemberService {
                 getMember.getName());
     }
 
+    public MemberResponse login(String loginId, String password){
+        return memberRepository.findByLoginId(loginId)
+                .filter(member -> member.getPassword().equals(password))
+                .map(MemberResponse::from)
+                .orElse(null);
+    }
+
     public List<MemberResponse> getAllMembers(){
         return memberRepository.findAll()
                 .stream()
