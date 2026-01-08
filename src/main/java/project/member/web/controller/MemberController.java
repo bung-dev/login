@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import project.member.domain.MemberService;
 import project.member.domain.dto.MemberRequest;
 import project.member.domain.dto.MemberResponse;
+import project.member.web.SessionConst;
 
 import java.util.List;
 
-import static project.member.web.SessionConst.LOGIN_MEMBER;
 
 @Log4j2
 @RestController
@@ -53,7 +53,7 @@ public class MemberController {
                                                        HttpServletRequest request){
         MemberResponse login = memberService.login(loginId, password);
         HttpSession httpSession = request.getSession();
-        httpSession.setAttribute(LOGIN_MEMBER, loginId);
+        httpSession.setAttribute(SessionConst.LOGIN_MEMBER, login);
 
         return  ResponseEntity.ok().body(login);
     }
