@@ -6,10 +6,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.jspecify.annotations.NonNull;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.member.domain.MemberService;
@@ -17,6 +14,8 @@ import project.member.domain.dto.MemberRequest;
 import project.member.domain.dto.MemberResponse;
 
 import java.util.List;
+
+import static project.member.web.SessionConst.LOGIN_MEMBER;
 
 @Log4j2
 @RestController
@@ -47,34 +46,20 @@ public class MemberController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/login/cookie")
-    public ResponseEntity<MemberResponse> loginCookie(@RequestParam String loginId, @RequestParam String password){
-        MemberResponse login = memberService.login(loginId, password);
-        ResponseCookie cookie = getResponseCookie(login);
 
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(login);
-    }
-
-
-    @PostMapping("/login/session")
+    @PostMapping("/login")
     public ResponseEntity<MemberResponse> loginSession(@RequestParam String loginId,
                                                        @RequestParam String password,
                                                        HttpServletRequest request){
         MemberResponse login = memberService.login(loginId, password);
         HttpSession httpSession = request.getSession();
-        httpSession.setAttribute("loginId", loginId);
+        httpSession.setAttribute(LOGIN_MEMBER, loginId);
 
         return  ResponseEntity.ok().body(login);
 
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logoutMember(@CookieValue(name = "loginId",required = false) String loginId) {
-        ResponseCookie cookie = expireCookie(loginId);
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
-    }
-
-    @PostMapping("/logout/session")
     public ResponseEntity<Void> logoutSession(HttpServletRequest request) {
 
         HttpSession session = request.getSession(false);
@@ -85,23 +70,41 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
-    private static @NonNull ResponseCookie getResponseCookie(MemberResponse login) {
-        return ResponseCookie.from("loginId", login.loginId())
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .sameSite("Strict")
-                .maxAge(3600)
-                .build();
-    }
+    /**
+     * 쿠키 로그인 방식, 세션 로그인 방식을 주로 사용하기에 학습용으로 주석처리
+     */
 
-    private static ResponseCookie expireCookie(String loginId){
-        return ResponseCookie.from("loginId",loginId)
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .sameSite("Strict")
-                .maxAge(0)
-                .build();
-    }
+    //    @PostMapping("/login/cookie")
+//    public ResponseEntity<MemberResponse> loginCookie(@RequestParam String loginId, @RequestParam String password){
+//        MemberResponse login = memberService.login(loginId, password);
+//        ResponseCookie cookie = getResponseCookie(login);
+//
+//        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(login);
+//    }
+
+//    @PostMapping("/logout/cookie")
+//    public ResponseEntity<Void> logoutCookie(@CookieValue(name = "loginId",required = false) String loginId) {
+//        ResponseCookie cookie = expireCookie(loginId);
+//        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
+//    }
+
+//    private static @NonNull ResponseCookie getResponseCookie(MemberResponse login) {
+//        return ResponseCookie.from("loginId", login.loginId())
+//                .httpOnly(true)
+//                .secure(true)
+//                .path("/")
+//                .sameSite("Strict")
+//                .maxAge(3600)
+//                .build();
+//    }
+//
+//    private static ResponseCookie expireCookie(String loginId){
+//        return ResponseCookie.from("loginId",loginId)
+//                .httpOnly(true)
+//                .secure(true)
+//                .path("/")
+//                .sameSite("Strict")
+//                .maxAge(0)
+//                .build();
+//    }
 }
