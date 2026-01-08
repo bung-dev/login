@@ -7,8 +7,8 @@ import lombok.extern.log4j.Log4j2;
 import org.jspecify.annotations.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.HandlerInterceptor;
+import project.member.web.SessionConst;
 
-import static project.member.web.SessionConst.LOGIN_MEMBER;
 
 @Log4j2
 public class LoginCheckInterceptor implements HandlerInterceptor {
@@ -19,7 +19,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
                              @NonNull Object handler) throws Exception {
         HttpSession session = request.getSession();
 
-        if (session == null || session.getAttribute(LOGIN_MEMBER) == null) {
+        if (session == null || session.getAttribute(SessionConst.LOGIN_MEMBER) == null) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
 
             return false;
