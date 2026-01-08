@@ -72,6 +72,17 @@ public class MemberController {
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
     }
 
+    @PostMapping("/logout/session")
+    public ResponseEntity<Void> logoutSession(HttpServletRequest request) {
+
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
     private static @NonNull ResponseCookie getResponseCookie(MemberResponse login) {
         return ResponseCookie.from("loginId", login.loginId())
                 .httpOnly(true)
