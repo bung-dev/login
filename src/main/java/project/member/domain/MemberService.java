@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.member.domain.dto.MemberRequest;
 import project.member.domain.dto.MemberResponse;
+import project.member.web.exception.CustomException;
+import project.member.web.exception.ErrorCode;
 
 import java.util.List;
 
@@ -29,7 +31,7 @@ public class MemberService {
     public MemberResponse getMemberById(Long id){
         Member getMember = memberRepository.findById(id);
         if (getMember == null) {
-            return null; // 임시 널 반환, 예외 처리 로직 추가해야함
+            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
         }
 
         return new MemberResponse(getMember.getLoginId(),
