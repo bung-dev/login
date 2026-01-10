@@ -31,11 +31,11 @@ public class MemberController {
     }
 
     @PostMapping
-    public ResponseEntity<MemberResponse> createMembers(@Valid MemberRequest request){
+    public ResponseEntity<MemberResponse> createMembers(@Valid @RequestBody MemberRequest request){
         return ResponseEntity.status(HttpStatus.CREATED).body(memberService.createMember(request));
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<MemberResponse>> getAllMembers(){
         return ResponseEntity.ok(memberService.getAllMembers());
     }
