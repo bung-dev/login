@@ -36,7 +36,11 @@ public class MemberRepository {
     }
 
     public void deleteMemberById(Long id){
-        store.remove(id);
+        Member member = store.get(id);
+        member.setDeleted(MemberStatus.DELETED);
+        member.setName("deletedName");
+        member.setLoginId("deletedMember");
+        member.setPassword("deletedPassword");
     }
 
     public void clear(){
