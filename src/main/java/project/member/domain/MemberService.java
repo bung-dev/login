@@ -40,6 +40,7 @@ public class MemberService {
 
     public MemberResponse login(String loginId, String password){
         return memberRepository.findByLoginId(loginId)
+                .filter(member -> !(member.getDeleted() == MemberStatus.DELETED))
                 .filter(member -> member.getPassword().equals(password))
                 .map(MemberResponse::from)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_CREDENTIALS));
