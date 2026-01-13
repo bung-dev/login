@@ -70,7 +70,7 @@ public class MemberController {
     }
 
     /**
-     * 쿠키 로그인 방식, 세션 로그인 방식을 주로 사용하기에 학습용으로 주석처리
+     * 쿠키 로그인 방식, 세션 로그인 방식을 주로 사용하기에 주석처리
      */
 
     //    @PostMapping("/login/cookie")

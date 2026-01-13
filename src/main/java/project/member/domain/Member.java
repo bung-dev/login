@@ -1,33 +1,41 @@
 package project.member.domain;
 
-import jakarta.validation.constraints.NotEmpty;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter
 public class Member {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotEmpty
+    @Column(unique = true)
     private String loginId;
 
-    @NotEmpty
     private String name;
 
-    @NotEmpty
     private String password;
 
-    @NotEmpty
-    private MemberStatus deleted;
+    @Enumerated(EnumType.STRING)
+    private MemberStatus status;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Builder
-    public Member(String loginId, String name, String password) {
+    public Member(String loginId, String name, String password, Role role) {
         this.loginId = loginId;
         this.name = name;
         this.password = password;
-        this.deleted = MemberStatus.ACTIVE;
+        this.role = role;
+        this.status = MemberStatus.ACTIVE;
+    }
+
+    public boolean isDeleted() {
+        return status == MemberStatus.DELETED;
     }
 }
