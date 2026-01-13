@@ -32,7 +32,7 @@ public class MemberService {
         Member getMember = memberRepository.findById(id);
         if (getMember == null) {
             throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
-        }
+        } //findById를 Optional이면 orElseThorw로 리팩토링이 가능, JPA로 리팩토링하며 구현예정
 
         return new MemberResponse(getMember.getLoginId(),
                 getMember.getName());
@@ -54,6 +54,12 @@ public class MemberService {
     }
 
     public void deleteMember(Long id){
-        memberRepository.deleteMemberById(id);
+        Member member = memberRepository.findById(id);
+        if (member == null) {
+            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+            //findById를 Optional이면 orElseThorw로 리팩토링이 가능, JPA로 리팩토링하며 구현예정
+        } else {
+            memberRepository.deleteMemberById(id);
+        }
     }
 }
