@@ -47,5 +47,6 @@ public class InMemoryMemberRepository {
 
     public void clear(){
         store.clear();
+        sequence = 0L;
     }
 }
