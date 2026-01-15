@@ -1,5 +1,6 @@
 package project.member;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import project.member.repository.InMemoryMemberRepository;
 import project.member.service.InMemoryMemberService;
@@ -15,6 +16,11 @@ public class MembersServiceTest {
     InMemoryMemberRepository inMemoryMemberRepository = new InMemoryMemberRepository();
 
     InMemoryMemberService inMemoryMemberService = new InMemoryMemberService(inMemoryMemberRepository);
+
+    @AfterEach
+    void tearDown() {
+        inMemoryMemberRepository.clear();
+    }
 
     @Test
     void createMemberAndGetMemberById(){
@@ -55,6 +61,7 @@ public class MembersServiceTest {
         //when
         inMemoryMemberService.deleteMember(1L);
         //then
-        assertThat(inMemoryMemberService.getMemberById(1L)).isNull();
+        MemberResponse deletedMember = inMemoryMemberService.getMemberById(1L);
+        assertThat(deletedMember.name()).isEqualTo("deletedName");
     }
 }
