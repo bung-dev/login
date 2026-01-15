@@ -20,7 +20,7 @@ import java.util.List;
 @Log4j2
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/members")
+@RequestMapping("memory/members")
 public class InMemoryMemberController {
 
     private final InMemoryMemberService inMemoryMemberService;
