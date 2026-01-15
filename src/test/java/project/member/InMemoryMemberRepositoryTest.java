@@ -3,6 +3,7 @@ package project.member;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import project.member.domain.Member;
+import project.member.domain.MemberStatus;
 import project.member.repository.InMemoryMemberRepository;
 
 import java.util.List;
@@ -22,31 +23,18 @@ class InMemoryMemberRepositoryTest {
     @Test
     void saveAndFindById(){
         //given
-        Member member1 = Member.builder()
-                .loginId("test1")
-                .password("test!")
-                .name("test1")
-                .build();
+        Member member1 = Member.create("test1", "test1", "test!");
         //when
-        Member member = inMemoryMemberRepository.save(member1);
+        Member findMember = inMemoryMemberRepository.save(member1);
         //then
-        Member findMember = inMemoryMemberRepository.findById(member.getId());
-        assertThat(findMember).isEqualTo(member);
-    }
-
+        assertThat(findMember).isEqualTo(member1);
+}
     @Test
     void findAll(){
         //given
-        Member member1 = Member.builder()
-                .loginId("test1")
-                .password("test!")
-                .name("test1")
-                .build();
-        Member member2 = Member.builder()
-                .loginId("test2")
-                .password("test!")
-                .name("test2")
-                .build();
+
+        Member member1 = Member.create("test1", "test1", "test!");
+        Member member2 = Member.create("test2", "test2", "test!");
 
         inMemoryMemberRepository.save(member1);
         inMemoryMemberRepository.save(member2);
@@ -62,11 +50,7 @@ class InMemoryMemberRepositoryTest {
     @Test
     void deleteByMemberId(){
         //given
-        Member member1 = Member.builder()
-                .loginId("test1")
-                .password("test!")
-                .name("test1")
-                .build();
+        Member member1 = Member.create("test1", "test1", "test!");
 
         Member member = inMemoryMemberRepository.save(member1);
         //when
@@ -74,6 +58,7 @@ class InMemoryMemberRepositoryTest {
         inMemoryMemberRepository.deleteMemberById(member.getId());
 
         //then
-        assertThat(inMemoryMemberRepository.findById(member.getId())).isNull();
+        Member deletedMember = inMemoryMemberRepository.findById(member.getId());
+        assertThat(deletedMember.getStatus()).isEqualTo(MemberStatus.DELETED);
     }
 }
