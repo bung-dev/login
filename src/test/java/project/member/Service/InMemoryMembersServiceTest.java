@@ -1,4 +1,4 @@
-package project.member;
+package project.member.Service;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
-public class MembersServiceTest {
+public class InMemoryMembersServiceTest {
 
     InMemoryMemberRepository inMemoryMemberRepository = new InMemoryMemberRepository();
 
