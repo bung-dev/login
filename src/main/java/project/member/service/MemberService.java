@@ -3,6 +3,7 @@ package project.member.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import project.member.domain.Member;
 import project.member.domain.dto.MemberRequest;
 import project.member.domain.dto.MemberResponse;
@@ -18,6 +19,7 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
 
+    @Transactional
     public MemberResponse join(MemberRequest req){
         if (memberRepository.existsByLoginId(req.loginId())) {
             throw ErrorCode.DUPLICATE_LOGIN_ID.exception();
@@ -30,33 +32,36 @@ public class MemberService {
         return  MemberResponse.from(saved);
     }
 
-    public MemberResponse get(String loginId){
-        Member member = memberRepository.findByLoginId(loginId)
+    @Transactional(readOnly = true)
+    public MemberResponse get(Long id){
+        Member member = memberRepository.findById(id)
                 .orElseThrow(ErrorCode.MEMBER_NOT_FOUND::exception);
 
 
         return MemberResponse.from(member);
     }
 
-    public List<MemberResponse> list(){
+    @Transactional(readOnly = true)
+    public List<MemberResponse> list(){ //페이징 추가 예정
         return memberRepository.findAll()
                 .stream()
                 .map(MemberResponse::from)
                 .toList();
     }
 
+    @Transactional
     public MemberResponse update(MemberRequest req){
         Member member = memberRepository.findByLoginId(req.loginId())
                 .orElseThrow(ErrorCode.MEMBER_NOT_FOUND::exception);
 
         member.changeName(req.name());
-        member.changePassword(req.password());
-        Member updated = memberRepository.save(member);
+        //비밀번호 변경 추가 예정
 
-        return MemberResponse.from(updated);
+        return MemberResponse.from(member);
     }
 
+    @Transactional
     public void delete(Long id){
-        memberRepository.deleteById(id);
+        memberRepository.deleteById(id); //소프트 딜리트 추가 예정
     }
 }
