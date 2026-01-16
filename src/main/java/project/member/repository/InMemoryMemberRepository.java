@@ -3,7 +3,6 @@ package project.member.repository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Repository;
 import project.member.domain.Member;
-import project.member.domain.MemberStatus;
 
 import java.util.*;
 
@@ -39,7 +38,6 @@ public class InMemoryMemberRepository {
 
     public void deleteMemberById(Long id){
         Member member = store.get(id);
-        member.setStatus(MemberStatus.DELETED);
         member.setName("deletedName");
         member.setLoginId("deletedMember");
         member.setPassword("deletedPassword");

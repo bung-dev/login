@@ -27,16 +27,12 @@ public class Member {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private MemberStatus status;
-
-    @Enumerated(EnumType.STRING)
     private Role role;
 
     @CreatedDate
     private LocalDateTime createdAt;
 
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
+    private Boolean deletedAt;
 
     @Builder(access = AccessLevel.PROTECTED)
     private Member(String loginId, String name, String password) {
@@ -44,7 +40,6 @@ public class Member {
         this.name = name;
         this.password = password;
         this.role = Role.ROLE_Member;
-        this.status = MemberStatus.ACTIVE;
     }
 
     public static Member create(String loginId, String name, String password) {
@@ -55,10 +50,9 @@ public class Member {
                 .build();
     }
 
-    public boolean isDeleted() {
-        return status == MemberStatus.DELETED;
+    public boolean delete() {
+        return this.deletedAt != null;
     }
-
 
     public void changeName(String name) {
         this.name = name;

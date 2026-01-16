@@ -3,7 +3,6 @@ package project.member.repository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import project.member.domain.Member;
-import project.member.domain.MemberStatus;
 
 import java.util.List;
 
