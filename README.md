@@ -2,23 +2,24 @@
 <img width="800" height="500" alt="image" src="https://github.com/user-attachments/assets/bbaf10c2-26ca-4ebc-a5c2-66a67b7b8289" />
 
 
-## Status (Last updated: 2026-01-14)
+## Status (Last updated: 2026-01-17)
 - ✅ Cookie 로그인 구현
 - ✅ Session 로그인 구현
 - ✅ Interceptor / ArgumentResolver 기반 로그인 주입(@Login) + 예외 공통 처리 + Bean Validation
 - ✅ JPA Refactoring 완료
   - Entity/Repository 중심으로 영속 계층 정리
   - 트랜잭션 경계 정리(@Transactional)
-
-✅ Soft Delete(논리 삭제) 적용
+  - 
+- ✅ Soft Delete(논리 삭제) 적용
   - delete 시점에 물리 삭제 대신 UPDATE로 처리
   - 기본 조회에서 삭제 데이터 제외(전역 필터)
+  - 
+- ✅ Legacy 코드 격리 (member 스캔 범위로 legacy 제외)
+- ✅ ErrorResponse.of(...) 팩토리 메서드
+- ✅ Spring Security 401/403 예외 JSON 응답 처리(EntryPoint/DeniedHandler)
+- ✅ CustomUserDetails/Service 구현 + @AuthenticationPrincipal 기반 구현
 
-- 🚧 **Spring Security 적용**
-  - [ ] (Security) SecurityFilterChain 기반 인증/인가 구성
-  - [ ] (Security) 권한 정책 정리(permitAll / role 기반 접근제어)
-  - [ ] (Security) PasswordEncoder(BCrypt) 적용 + 예외 처리(EntryPoint/DeniedHandler)
-
+- ⏳ 권한 정책 정리(permitAll / role 기반 접근 제어) 마무리
 - ⏳ JWT 적용 (Access/Refresh, 재발급, 로그아웃)
 - ⏳ OAuth2 Login + JWT 통합
 ---
@@ -84,6 +85,7 @@
 → “가벼운 요청”과 “중요한 요청”을 분리
 
 ---
+
 ## 4. JPA Refactoring + Soft Delete
 
 ### 4-1. JPA Refactoring 
@@ -103,7 +105,6 @@
 - 장점: 조회/저장 로직이 표준화되고, “수정/삭제/조회”가 기능 단위로 예측 가능해진다
 - 단점: 영속성 컨텍스트/지연 로딩/트랜잭션 범위 같은 JPA 특성을 이해하고 설계에 반영해야 한다
 
-
 ---
 
 ### 4-2. Soft Delete(논리 삭제) 적용 
@@ -117,16 +118,34 @@
 - 기본 조회에서는 삭제 데이터가 자동으로 제외되도록 “전역 조건”을 적용한다
 - 관리자/복구처럼 “삭제 포함 조회”가 필요한 케이스는 별도 쿼리로 분리한다
 
+---
+
+## 5. Spring Security 적용 + Member API (WIP)
+
+### 5-1. Legacy 코드 격리
+- 세션/인터셉터/ArgumentResolver 방식은 legacy 패키지로 묶고,
+  컴포넌트 스캔 범위를 member로 제한해 현재 런타임에서 제외했다.
+
+### 5-2. 에러 응답 생성 통일
+- ErrorResponse.of(...) 정적 팩토리를 도입해
+  GlobalExceptionHandler에서 new 생성 대신 of 생성자로 응답 생성 로직을 통일했다.
+
+### 5-3. Security 401/403 JSON 응답 + 인증 주체(PK) 처리
+- 401: RestAuthenticationEntryPoint, 403: RestAccessDeniedHandler 구현으로 보안 예외도 JSON으로 표준화했다.
+- CustomMemberDetails에 memberId(PK) 접근 메서드를 추가하고,
+  @AuthenticationPrincipal로 주입받아 내 정보 조회/수정/삭제를 PK 기반으로 처리한다.
+  > 인증 주체 식별은 loginId/email 대신 PK(memberId)로 통일했다.
+  > 외부 식별자는 변경/중복/정규화 이슈가 발생하기 쉬워 운영에서 정합성을 흔들 수 있기 때문이다.
+
+
 ## Current Focus (WIP)
 
-Spring Security 적용을 진행 중이다.
+- 연결 후 동작 검증 및 예외 응답(JSON) 포맷 점검
+- 권한 정책 확정 (예: /members/all은 ADMIN 전용)
 
-- SecurityFilterChain 구성 + 인증/인가 흐름 정리
-- 권한 정책(permitAll / role 기반 접근 제어)
-- BCrypt PasswordEncoder 적용
-- 인증/인가 예외 처리(EntryPoint / DeniedHandler)
+다음 단계로 JWT(Access/Refresh) 발급/재발급/로그아웃을 구현한 뒤,
+OAuth2 Login + JWT 통합까지 확장할 예정이다.
 
-이후 JWT(Access/Refresh) → OAuth2 Login 연동까지 확장 예정
 
 ## 📌 Commit Convention
 
