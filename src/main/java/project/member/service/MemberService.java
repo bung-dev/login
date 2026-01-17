@@ -50,8 +50,8 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberResponse update(MemberRequest req){
-        Member member = memberRepository.findByLoginId(req.loginId())
+    public MemberResponse update(Long id, MemberRequest req){
+        Member member = memberRepository.findById(id)
                 .orElseThrow(ErrorCode.MEMBER_NOT_FOUND::exception);
 
         member.changeName(req.name());
