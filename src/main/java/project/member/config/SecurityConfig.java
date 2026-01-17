@@ -11,6 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import project.member.security.CustomMemberDetailsService;
 import project.member.security.handler.RestAccessDeniedHandler;
 import project.member.security.handler.RestAuthenticationEntryPoint;
 
@@ -22,6 +23,7 @@ public class SecurityConfig {
 
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
     private final RestAccessDeniedHandler restAccessDeniedHandler;
+    private final CustomMemberDetailsService customMemberDetailsService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -43,6 +45,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,"/members").permitAll()
                         .requestMatchers(HttpMethod.GET,"/members/all").hasRole("ADMIN")
                         .anyRequest().authenticated())
+                .userDetailsService(customMemberDetailsService)
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(restAuthenticationEntryPoint)
                         .accessDeniedHandler(restAccessDeniedHandler));
