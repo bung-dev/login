@@ -8,6 +8,8 @@ import java.util.Map;
 public record ErrorResponse(
         String errorCode,
         String message,
-        Map<String, String> errors
-) {
+        Map<String, String> errors) {
+    public  static ErrorResponse of(String errorCode, String message, Map<String, String> errors) {
+        return new ErrorResponse(errorCode, message, errors);
+    }
 }

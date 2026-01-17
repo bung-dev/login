@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(errorCode.getStatus())
-                .body(new ErrorResponse(errorCode.getCode(), errorCode.getMessage(),null));
+                .body(ErrorResponse.of(errorCode.getCode(), errorCode.getMessage(),null));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
         ErrorCode errorCode = ErrorCode.INVALID_REQUEST;
         return ResponseEntity
                 .status(errorCode.getStatus())
-                .body(new ErrorResponse(errorCode.getCode(),null,errors));
+                .body(ErrorResponse.of(errorCode.getCode(),null,errors));
 
     }
 }
