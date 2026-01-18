@@ -38,5 +38,21 @@ public class MemberServiceTest {
         MemberResponse getMember = memberService.get(member.getId());
         assertThat(getMember.name()).isEqualTo(member.getName());
     }
-    
+
+    @Test
+    void list() {
+        //given
+        MemberRequest memberRequest1 = new MemberRequest("testtest1", "testtest1!", "테스트1");
+        MemberRequest memberRequest2 = new MemberRequest("testtest2", "testtest2!", "테스트2");
+        memberService.join(memberRequest1);
+        memberService.join(memberRequest2);
+        //when
+        List<MemberResponse> listMember = memberService.list();
+        //then
+        assertThat(listMember).hasSize(2);
+        assertThat(listMember.get(0).name()).isEqualTo(memberRequest1.name());
+        assertThat(listMember.get(1).name()).isEqualTo(memberRequest2.name());
+    }
+
+
 }
