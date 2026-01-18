@@ -14,7 +14,6 @@ public class InMemoryMemberRepository {
     private static long sequence = 0L;
 
     public Member save(Member member){
-        member.setId(++sequence);
         store.put(member.getId(),member);
         return member;
     }
@@ -38,9 +37,9 @@ public class InMemoryMemberRepository {
 
     public void deleteMemberById(Long id){
         Member member = store.get(id);
-        member.setName("deletedName");
-        member.setLoginId("deletedMember");
-        member.setPassword("deletedPassword");
+//        member.setName("deletedName");
+//        member.setLoginId("deletedMember");
+//        member.setPassword("deletedPassword");
     }
 
     public void clear(){
