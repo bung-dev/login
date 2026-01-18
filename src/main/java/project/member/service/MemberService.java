@@ -34,7 +34,7 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public MemberResponse get(Long id){
-        Member member = memberRepository.findById(id)
+        Member member = memberRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(ErrorCode.MEMBER_NOT_FOUND::exception);
 
 
