@@ -18,18 +18,24 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(unique = true)
+    @Column(nullable = false,unique = true)
     private String loginId;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @CreatedDate
     private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 
     private LocalDateTime deletedAt;
 
@@ -54,7 +60,7 @@ public class Member {
         this.deletedAt = LocalDateTime.now();
     }
 
-    public boolean isDelete() {
+    public boolean isDeleted() {
         return this.deletedAt != null;
     }
 
