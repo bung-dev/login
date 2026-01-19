@@ -32,7 +32,7 @@ public class MemberServiceTest {
         MemberRequest memberRequest = new MemberRequest("testtest1", "testtest1!", "테스트1");
         //when
         MemberResponse memberResponse = memberService.join(memberRequest);
-        Member member = memberRepository.findByLoginId(memberResponse.loginId())
+        Member member = memberRepository.findByLoginIdAndDeletedAtIsNull(memberResponse.loginId())
                 .orElseThrow(ErrorCode.MEMBER_NOT_FOUND::exception);
         //then
         MemberResponse getMember = memberService.get(member.getId());
@@ -63,7 +63,7 @@ public class MemberServiceTest {
         MemberRequest updateRequest = new MemberRequest("testUpdate1", "testUpdate1!", "테스트업데이트1");
 
         //when
-        Member member = memberRepository.findByLoginId(memberResponse.loginId())
+        Member member = memberRepository.findByLoginIdAndDeletedAtIsNull(memberResponse.loginId())
                 .orElseThrow(ErrorCode.MEMBER_NOT_FOUND::exception);
 
         MemberResponse update = memberService.update(member.getId(), updateRequest);
@@ -80,7 +80,7 @@ public class MemberServiceTest {
         MemberRequest memberRequest = new MemberRequest("testtest1", "testtest1!", "테스트1");
         MemberResponse memberResponse = memberService.join(memberRequest);
         //when
-        Member member = memberRepository.findByLoginId(memberResponse.loginId())
+        Member member = memberRepository.findByLoginIdAndDeletedAtIsNull(memberResponse.loginId())
                 .orElseThrow(ErrorCode.MEMBER_NOT_FOUND::exception);
         memberService.delete(1L);
         //then
