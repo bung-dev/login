@@ -60,10 +60,6 @@ public class Member {
         this.deletedAt = LocalDateTime.now();
     }
 
-    public boolean isDeleted() {
-        return this.deletedAt != null;
-    }
-
     public void changeName(String name) {
         this.name = name;
     }
