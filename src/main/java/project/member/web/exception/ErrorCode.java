@@ -12,6 +12,10 @@ public enum ErrorCode {
     INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "MEMBER_401_INVALID", "아이디 또는 비밀번호가 올바르지 않습니다."),
     DUPLICATE_LOGIN_ID(HttpStatus.CONFLICT, "MEMBER_409", "이미 사용중인 아이디입니다"),
 
+    JWT_EXPIRED(HttpStatus.UNAUTHORIZED, "JWT_401_EXPIRED", "JWT 토큰이 만료되었습니다."),
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "JWT_401_INVALID", "유효하지 않은 JWT 토큰입니다."),
+
+
     INVALID_REQUEST(HttpStatus.BAD_REQUEST, "COMMON_400", "잘못된 요청입니다."),
     FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON_403", "접근 권한이 없습니다.");
 
