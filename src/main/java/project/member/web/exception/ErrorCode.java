@@ -14,7 +14,7 @@ public enum ErrorCode {
 
     JWT_EXPIRED(HttpStatus.UNAUTHORIZED, "JWT_401_EXPIRED", "JWT 토큰이 만료되었습니다."),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "JWT_401_INVALID", "유효하지 않은 JWT 토큰입니다."),
-
+    INVALID_TOKEN_CATEGORY(HttpStatus.UNAUTHORIZED, "JWT_401_NOT_ACCESS", "Access Token이 아닙니다."),
 
     INVALID_REQUEST(HttpStatus.BAD_REQUEST, "COMMON_400", "잘못된 요청입니다."),
     FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON_403", "접근 권한이 없습니다.");
