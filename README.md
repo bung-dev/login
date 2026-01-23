@@ -2,7 +2,7 @@
 <img width="800" height="500" alt="image" src="https://github.com/user-attachments/assets/bbaf10c2-26ca-4ebc-a5c2-66a67b7b8289" />
 
 
-## Status (Last updated: 2026-01-21)
+## Status (Last updated: 2026-01-22)
 
 - ✅ Cookie 로그인 구현
 - ✅ Session 로그인 구현
@@ -14,8 +14,10 @@
 - ✅ Spring Security 401/403 예외 JSON 응답 처리(EntryPoint/DeniedHandler)
 - ✅ CustomUserDetails/Service 구현 + @AuthenticationPrincipal 기반 “내 정보” 처리
 - ✅ JWT 인증(Access Token only) 적용
+  - ✅ LoginFilter 제거 → Controller/Service 기반 토큰 발급으로 전환
 - ⏳ Refresh Token 구현 예정
 - ⏳ OAuth2 Login + JWT 통합 예정
+
 
 ---
 
@@ -137,7 +139,13 @@
 - 이후 요청은 JWTFilter가 Authorization: Bearer <token>을 추출해 JWTUtil로 검증한다.
 - 토큰이 유효하면 CustomMemberDetailsService/CustomMemberDetails 기반으로 Authentication을 만들어 SecurityContext에 저장한다.
 
+### 5-5. LoginFilter 제거 → Controller/Service 기반 토큰 발급 전환
 
+- 기존에는 LoginFilter에서 인증 성공 시 토큰을 발급했지만, 현재는 AuthController → AuthService에서 발급하도록 리팩토링했다.
+- /login 요청은 AuthenticationManager.authenticate(...)로 인증을 수행하고, 성공 시 JWTUtil.createToken으로 Access Token을 생성한다.
+- 컨트롤러는 서비스만 의존하도록 구성해(Controller는 I/O, Service는 로직) 책임을 분리했다.
+- 토큰 스펙(만료/헤더/이름)은 CommonToken으로 상수화해 일관되게 관리한다.
+  
 ## Current Focus (WIP)
 
 - Refresh Token 설계/구현(재발급 플로우 포함)
