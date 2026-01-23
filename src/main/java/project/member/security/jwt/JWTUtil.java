@@ -23,8 +23,8 @@ public class JWTUtil {
         return getClaims(token).get("loginId",String.class);
     }
 
-    public String getTokenType(String token) {
-        return getClaims(token).get("tokenType",String.class);
+    public String getCategory(String token) {
+        return getClaims(token).get("category",String.class);
     }
 
     public String getRole(String token) {
@@ -35,11 +35,11 @@ public class JWTUtil {
         return getClaims(token).getExpiration().before(new Date());
     }
 
-    public String createToken(String loginId, String  role, String tokenType, long expired) {
+    public String createToken(String loginId, String  role, String category, long expired) {
         return Jwts.builder()
                 .claim("loginId", loginId)
                 .claim("role", role)
-                .claim("tokenType", tokenType)
+                .claim("category", category)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expired))
                 .signWith(secretKey)
