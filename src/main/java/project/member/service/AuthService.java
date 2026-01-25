@@ -37,6 +37,9 @@ public class AuthService {
 
             String accessToken = jwtUtil.createToken(loginId, role, JWT_ACCESS_TOKEN_NAME , JWT_ACCESS_TOKEN_EXPIRED_TIME);
             String refreshToken = jwtUtil.createToken(loginId, role, JWT_REFRESH_TOKEN_NAME, JWT_REFRESH_TOKEN_EXPIRED_TIME);
+
+            refreshRepository.deleteAllByLoginId(loginId);
+
             addRefreshToken(loginId,refreshToken);
 
             return TokenResponse.from(accessToken, refreshToken);
