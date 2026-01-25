@@ -15,7 +15,7 @@
 - ✅ CustomUserDetails/Service 구현 + @AuthenticationPrincipal 기반 “내 정보” 처리
 - ✅ JWT 인증(Access Token only) 적용
   - ✅ LoginFilter 제거 → Controller/Service 기반 토큰 발급으로 전환
-- ⏳ Refresh Token 구현 예정
+- ✅ Refresh Token 구현 완료(DB 저장 + 쿠키 전달 + 재발급)
 - ⏳ OAuth2 Login + JWT 통합 예정
 
 
@@ -145,11 +145,19 @@
 - /login 요청은 AuthenticationManager.authenticate(...)로 인증을 수행하고, 성공 시 JWTUtil.createToken으로 Access Token을 생성한다.
 - 컨트롤러는 서비스만 의존하도록 구성해(Controller는 I/O, Service는 로직) 책임을 분리했다.
 - 토큰 스펙(만료/헤더/이름)은 CommonToken으로 상수화해 일관되게 관리한다.
+
+- ### 5-6. Refresh Token 구현(DB 저장 + 쿠키 + 재발급)
+- Refresh Token은 DB에 저장하고, 로그인 시 Access/Refresh를 발급한 뒤 기존 토큰은 deleteAllByLoginId로 정리(계정당 1개 정책)했다.
+- Refresh는 `CookieUtil`로 쿠키를 내려주고, Access는 Authorization: Bearer <token> 헤더로 전달한다.
+- /reissue는 쿠키의 Refresh를 검증 후 새 Access/Refresh로 rotating 후, DB refresh/expiration 갱신 + 새 쿠키/Authorization 헤더로 응답한다.
+
+> Troubleshooting: 계정당 1개 Refresh 정책(`deleteAllByLoginId`)으로 다중 기기 로그인 시 기존 토큰이 무효화될 수 있음 / 만료시간(expiration) 단위(초·밀리초) 불일치에 대한 오류가 발생할 수 있으니 문서화 하여 디버깅에 용이하도록 설계
+
   
 ## Current Focus (WIP)
 
-- Refresh Token 설계/구현(재발급 플로우 포함)
-- OAuth2 Login 적용 후 JWT와 통합
+- OAuth2 Login 적용
+- OAuth2 Login + JWT(Access/Refresh) 통합
 
 ---
 
