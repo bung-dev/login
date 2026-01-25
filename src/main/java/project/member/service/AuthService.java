@@ -1,6 +1,7 @@
 package project.member.service;
 
-import jakarta.servlet.http.Cookie;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -47,6 +48,45 @@ public class AuthService {
         } catch (BadCredentialsException e) {
             throw ErrorCode.INVALID_CREDENTIALS.exception();
         }
+    }
+
+    public TokenResponse reissue(String refreshToken){
+        Refresh saveRefresh = refreshRepository.findByRefresh(refreshToken)
+                .orElseThrow(ErrorCode.REFRESH_TOKEN_INVALID::exception);
+
+        long now = System.currentTimeMillis();
+        if(saveRefresh.getExpiration() < now){
+            refreshRepository.deleteByRefresh(refreshToken);
+            throw ErrorCode.REFRESH_TOKEN_EXPIRED.exception();
+        }
+        String loginId;
+        String role;
+
+        try{
+            if(jwtUtil.isExpired(refreshToken)){
+                refreshRepository.deleteByRefresh(refreshToken);
+                throw ErrorCode.REFRESH_TOKEN_EXPIRED.exception();
+            }
+            loginId = jwtUtil.getLoginId(refreshToken);
+            role = jwtUtil.getRole(refreshToken);
+        } catch (ExpiredJwtException e){
+            throw ErrorCode.REFRESH_TOKEN_EXPIRED.exception();
+        } catch (JwtException | IllegalArgumentException e){
+            throw ErrorCode.REFRESH_TOKEN_INVALID.exception();
+        }
+
+        if (!saveRefresh.getLoginId().equals(loginId)) {
+            throw ErrorCode.REFRESH_TOKEN_MISMATCH.exception();
+        }
+
+        String newAccessToken = jwtUtil.createToken(loginId, role, JWT_ACCESS_TOKEN_NAME, JWT_ACCESS_TOKEN_EXPIRED_TIME);
+        String newRefreshToken = jwtUtil.createToken(loginId, role, JWT_REFRESH_TOKEN_NAME, JWT_REFRESH_TOKEN_EXPIRED_TIME);
+
+        long newExpiresAtMillis = now + JWT_REFRESH_TOKEN_EXPIRED_TIME;
+        saveRefresh.changeExpiration(newExpiresAtMillis);
+        saveRefresh.changeRefresh(newRefreshToken);
+
+        return TokenResponse.from(newAccessToken,newRefreshToken);
     }
 
     protected void addRefreshToken(String loginId, String refreshToken) {
