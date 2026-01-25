@@ -11,4 +11,6 @@ public interface RefreshRepository extends JpaRepository<Refresh, Long> {
     Optional<Refresh> findByRefresh(String refresh);
 
     void deleteByRefresh(String refresh);
+
+    void deleteAllByLoginId(String loginId);
 }
