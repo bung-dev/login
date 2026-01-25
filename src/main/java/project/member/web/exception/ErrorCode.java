@@ -16,6 +16,11 @@ public enum ErrorCode {
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "JWT_401_INVALID", "유효하지 않은 JWT 토큰입니다."),
     INVALID_TOKEN_CATEGORY(HttpStatus.UNAUTHORIZED, "JWT_401_NOT_ACCESS", "Access Token이 아닙니다."),
 
+    REFRESH_TOKEN_MISSING(HttpStatus.UNAUTHORIZED, "JWT_401_RT_001", "리프레시 토큰 쿠키가 없습니다"),
+    REFRESH_TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "JWT_401_RT_002", "유효하지 않은 리프레시 토큰입니다"),
+    REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "JWT_401_RT_003", "리프레시 토큰이 만료됐습니다"),
+    REFRESH_TOKEN_MISMATCH(HttpStatus.UNAUTHORIZED, "JWT_401_RT_004", "리프레시 토큰 정보가 일치하지 않습니다"),
+
     INVALID_REQUEST(HttpStatus.BAD_REQUEST, "COMMON_400", "잘못된 요청입니다."),
     FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON_403", "접근 권한이 없습니다.");
 
