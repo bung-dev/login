@@ -64,6 +64,7 @@ public class AuthService {
         }
         String loginId;
         String role;
+        String category;
 
         try{
             if(jwtUtil.isExpired(refreshToken)){
@@ -72,6 +73,7 @@ public class AuthService {
             }
             loginId = jwtUtil.getLoginId(refreshToken);
             role = jwtUtil.getRole(refreshToken);
+            category = jwtUtil.getCategory(refreshToken);
         } catch (ExpiredJwtException e){
             throw ErrorCode.REFRESH_TOKEN_EXPIRED.exception();
         } catch (JwtException | IllegalArgumentException e){
@@ -80,6 +82,10 @@ public class AuthService {
 
         if (!saveRefresh.getLoginId().equals(loginId)) {
             throw ErrorCode.REFRESH_TOKEN_MISMATCH.exception();
+        }
+
+        if (!JWT_REFRESH_TOKEN_NAME.equals(category)) {
+            throw ErrorCode.INVALID_TOKEN_CATEGORY.exception();
         }
 
         String newAccessToken = jwtUtil.createToken(loginId, role, JWT_ACCESS_TOKEN_NAME, JWT_ACCESS_TOKEN_EXPIRED_TIME);
