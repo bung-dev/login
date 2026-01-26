@@ -92,7 +92,12 @@ public class AuthService {
         return TokenResponse.from(newAccessToken,newRefreshToken);
     }
 
-    protected void addRefreshToken(String loginId, String refreshToken) {
+    @Transactional
+    public void logout(String token){
+        refreshRepository.deleteByRefresh(token);
+    }
+
+    private void addRefreshToken(String loginId, String refreshToken) {
         long expiresAtMillis = System.currentTimeMillis() + JWT_REFRESH_TOKEN_EXPIRED_TIME;
         Refresh refresh = Refresh.create(loginId, refreshToken, expiresAtMillis);
         refreshRepository.save(refresh);
