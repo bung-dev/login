@@ -1,6 +1,10 @@
 # Login-Step-by-Step-Project
 <img width="800" height="500" alt="image" src="https://github.com/user-attachments/assets/bbaf10c2-26ca-4ebc-a5c2-66a67b7b8289" />
 
+## 🚀 Step-by-Step Auth Roadmap
+Cookie(Login) & Session(Login)구현은 **legacy 패키지에 보관**하고,  
+현재 운영 흐름은 **JPA(+Soft Delete) → Spring Security → JWT(Access/Refresh) → OAuth2(Google)** 로 확장/통합했다.
+
 
 ## Status (Last updated: 2026-01-27)
 
