@@ -16,7 +16,7 @@ public class CookieUtil {
     public String createCookie(String value) {
         return ResponseCookie.from(JWT_REFRESH_TOKEN_NAME, value)
                 .httpOnly(true)
-                .secure(true)
+                .secure(false)
                 .path("/")
                 .maxAge(JWT_COOKIE_REFRESH_TOKEN_EXPIRED_TIME)
                 .build()
@@ -38,7 +38,7 @@ public class CookieUtil {
     public String removeCookie(){
         return ResponseCookie.from(JWT_REFRESH_TOKEN_NAME,"")
                 .httpOnly(true)
-                .secure(true)
+                .secure(false)
                 .path("/")
                 .maxAge(0)
                 .build()
