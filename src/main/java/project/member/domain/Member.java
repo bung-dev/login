@@ -39,20 +39,12 @@ public class Member {
 
     private LocalDateTime deletedAt;
 
-    @Builder(access = AccessLevel.PROTECTED)
-    private Member(String loginId, String name, String password) {
+    @Builder
+    public Member(String loginId, String name, String password) {
         this.loginId = loginId;
         this.name = name;
         this.password = password;
         this.role = Role.ROLE_MEMBER;
-    }
-
-    public static Member create(String loginId, String name, String password) {
-        return Member.builder()
-                .loginId(loginId)
-                .name(name)
-                .password(password)
-                .build();
     }
 
     public void softDelete(){

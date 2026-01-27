@@ -27,7 +27,11 @@ public class MemberService {
         }
 
         String encodePassword = passwordEncoder.encode(req.password());
-        Member member = Member.create(req.loginId(), req.name(), encodePassword);
+        Member member = Member.builder()
+                .loginId(req.loginId())
+                .password(encodePassword)
+                .name(req.name())
+                .build();
         Member saved = memberRepository.save(member);
 
         return  MemberResponse.from(saved);

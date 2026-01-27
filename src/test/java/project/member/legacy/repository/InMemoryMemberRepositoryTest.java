@@ -22,7 +22,11 @@ class InMemoryMemberRepositoryTest {
     @Test
     void saveAndFindById(){
         //given
-        Member member1 = Member.create("test1", "test1", "test!");
+        Member member1 = Member.builder()
+                .loginId("test1")
+                .password("test1")
+                .name("test1")
+                .build();
         //when
         Member findMember = inMemoryMemberRepository.save(member1);
         //then
@@ -32,8 +36,16 @@ class InMemoryMemberRepositoryTest {
     void findAll(){
         //given
 
-        Member member1 = Member.create("test1", "test1", "test!");
-        Member member2 = Member.create("test2", "test2", "test!");
+        Member member1 = Member.builder()
+                .loginId("test1")
+                .password("test1")
+                .name("test1")
+                .build();
+        Member member2 = Member.builder()
+                .loginId("test2")
+                .password("test2")
+                .name("test2")
+                .build();
 
         inMemoryMemberRepository.save(member1);
         inMemoryMemberRepository.save(member2);
@@ -49,7 +61,11 @@ class InMemoryMemberRepositoryTest {
     @Test
     void deleteByMemberId(){
         //given
-        Member member1 = Member.create("test1", "test1", "test!");
+        Member member1 = Member.builder()
+                .loginId("test1")
+                .password("test1")
+                .name("test1")
+                .build();
 
         Member member = inMemoryMemberRepository.save(member1);
         //when

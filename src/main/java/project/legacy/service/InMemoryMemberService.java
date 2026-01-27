@@ -19,7 +19,11 @@ public class InMemoryMemberService {
     private final InMemoryMemberRepository inMemoryMemberRepository;
 
     public MemberResponse createMember(MemberRequest req) {
-        Member member = Member.create(req.loginId(), req.name(), req.password());
+        Member member = Member.builder()
+                .loginId(req.loginId())
+                .password(req.password())
+                .name(req.name())
+                .build();
 
         Member saveMember = inMemoryMemberRepository.save(member);
 
