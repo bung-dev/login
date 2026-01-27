@@ -39,9 +39,11 @@ public class JWTFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+        log.info("JWT Filter started uri={}", request.getRequestURI());
 
         String header = request.getHeader("Authorization");
         if (header == null || !header.startsWith("Bearer ")) {
+            log.info("JWT skip (no auth header) uri={}", request.getRequestURI());
             filterChain.doFilter(request, response);
             return;
         }
@@ -82,6 +84,20 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
     }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        return path.startsWith("/oauth2/")
+                || path.startsWith("/login/oauth2/")
+                || path.equals("/") || path.equals("/login")
+                || path.equals("/error")
+                || path.equals("/favicon.ico")
+                || path.equals("/index")
+                || path.startsWith("/css/")
+                || path.startsWith("/js/");
+    }
+
 
     private void writeError(HttpServletResponse response, ErrorCode errorCode) throws IOException {
         response.setStatus(errorCode.getStatus().value());
