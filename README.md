@@ -21,8 +21,14 @@ Cookie(Login) & Session(Login)구현은 **legacy 패키지에 보관**하고,
   - ✅ LoginFilter 제거 → Controller/Service 기반 토큰 발급으로 전환
 - ✅ Refresh Token 구현 완료(DB 저장 + 쿠키 전달 + 재발급)
 - ✅ OAuth2(Google) 로그인 + JWT 통합 완료
+- ⏳ Swagger(OpenAPI) 적용 예정 (API 문서 자동화 + 테스트/공유 편의)
+
 
 ---
+
+## Current Focus (WIP)
+- Swagger(OpenAPI) 적용 예정: API 문서 자동화 및 테스트/공유 편의성 강화
+
 
 ## 1. Cookie 로그인
 
