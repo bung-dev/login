@@ -54,13 +54,14 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
 
+        try {
         String category = jwtUtil.getCategory(token);
         if (!category.equals(JWT_ACCESS_TOKEN_NAME)){
             writeError(response,ErrorCode.INVALID_TOKEN_CATEGORY);
             return;
         }
 
-        try {
+
             String loginId = jwtUtil.getLoginId(token);
 
             UserDetails userDetails = customMemberDetailsService.loadUserByUsername(loginId);
