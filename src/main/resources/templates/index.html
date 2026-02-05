@@ -20,7 +20,7 @@
     <a class="btn" href="/oauth2/authorization/google">Google로 로그인</a>
 </div>
 
-<!-- ✅ 로그인 된 경우: 로그아웃 버튼 -->
+<!-- ✅ 로그인 된 경우: 로그아웃 + reissue 버튼 -->
 <div sec:authorize="isAuthenticated()">
     <div class="row">
     <span>
@@ -28,29 +28,49 @@
       <b sec:authentication="name"></b>
     </span>
 
+        <!-- ✅ 추가: reissue 버튼 -->
+        <button class="btn" type="button" onclick="reissue()">Access 재발급</button>
+
         <button class="btn" type="button" onclick="logout()">로그아웃</button>
     </div>
 </div>
 
 <script>
-    async function logout() {
+    async function reissue() {
       try {
-        // ✅ refresh 쿠키 기반 로그아웃 (Authorization 없어도 됨)
-        const res = await fetch("/logout", {
+        const res = await fetch("/reissue", {
           method: "POST",
-          credentials: "same-origin" // 쿠키 포함
+          credentials: "same-origin" // refresh 쿠키 포함
         });
 
-        // 멱등이면 204가 정상
-        if (res.status === 204 || res.ok) {
-          // (선택) localStorage 등에 accessToken 저장했다면 여기서 제거
-          // localStorage.removeItem("accessToken");
-
-          window.location.reload();
+        if (res.ok) {
+          alert("재발급 완료!");
           return;
         }
 
-        // 실패해도 화면 갱신(쿠키 만료가 내려가면 이미 로그아웃 상태일 수 있음)
+        // refresh 쿠키 없음/만료 등
+        if (res.status === 401) {
+          alert("재발급 실패: refresh 쿠키가 없거나 만료됨");
+          return;
+        }
+
+        alert("재발급 실패");
+      } catch (e) {
+        alert("재발급 중 오류 발생");
+      }
+    }
+
+    async function logout() {
+      try {
+        const res = await fetch("/logout", {
+          method: "POST",
+          credentials: "same-origin"
+        });
+
+        if (res.status === 204 || res.ok) {
+          window.location.reload();
+          return;
+        }
         window.location.reload();
       } catch (e) {
         window.location.reload();
