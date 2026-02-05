@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.member.domain.dto.LoginRequest;
 import project.member.domain.dto.TokenResponse;
@@ -25,6 +26,7 @@ import project.member.web.util.CookieUtil;
 @Tag(name = "Auth API", description = "로그인/토큰 재발급/로그아웃 인증 API")
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("api/v1")
 public class AuthController {
 
     private final AuthService authService;
