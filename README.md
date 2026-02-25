@@ -6,7 +6,7 @@ Cookie(Login) & Session(Login)구현은 **legacy 패키지에 보관**하고,
 현재 운영 흐름은 **JPA(+Soft Delete) → Spring Security → JWT(Access/Refresh) → OAuth2(Google)** 로 확장/통합했다.
 
 
-## Status (Last updated: 2026-01-27)
+## Status (Last updated: 2026-02-25)
 
 - ✅ Cookie 로그인 구현
 - ✅ Session 로그인 구현
@@ -21,13 +21,13 @@ Cookie(Login) & Session(Login)구현은 **legacy 패키지에 보관**하고,
   - ✅ LoginFilter 제거 → Controller/Service 기반 토큰 발급으로 전환
 - ✅ Refresh Token 구현 완료(DB 저장 + 쿠키 전달 + 재발급)
 - ✅ OAuth2(Google) 로그인 + JWT 통합 완료
-- ⏳ Swagger(OpenAPI) 적용 예정 (API 문서 자동화 + 테스트/공유 편의)
+- ✅ Swagger(OpenAPI) 적용 완료 (API 문서 자동화 + 테스트/공유 편의)
 
 
 ---
 
 ## Current Focus (WIP)
-- Swagger(OpenAPI) 적용 예정: API 문서 자동화 및 테스트/공유 편의성 강화
+- Exception 핸들링 보강 및 테스트 코드 추가
 
 
 ## 1. Cookie 로그인
@@ -178,6 +178,16 @@ Cookie(Login) & Session(Login)구현은 **legacy 패키지에 보관**하고,
 - OAuth2User를 프로젝트 사용자 모델에 맞게 감싸 CustomOauth2MemberDetails 인증 주체 일관성 유지
 
 
+## 7. Swagger (OpenAPI 3)
+
+### 7-1. API 문서 자동화
+- `springdoc-openapi-starter-webmvc-ui` 라이브러리를 통해 Swagger UI 제공
+
+### 7-2. 주요 설정 내용 (`OpenApiConfig`)
+- **Security Scheme**: JWT Bearer 인증 방식을 전역으로 설정하여 Swagger UI 내에서 간편하게 토큰 인증 테스트 가능
+
+
+
 ## 📌 Commit Convention
 
 | 이모지 | 태그 | 설명 |
@@ -195,7 +205,7 @@ Cookie(Login) & Session(Login)구현은 **legacy 패키지에 보관**하고,
 - Language: Java
 - Framework: Spring Boot
 - Persistence: Spring Data JPA
-- Security: Spring Security (WIP), JWT (Planned), OAuth2 (Planned)
+- Security: Spring Security, JWT, OAuth2
 - Database: MySQL, H2
 - Build Tool: Gradle
 - Test: JUnit
